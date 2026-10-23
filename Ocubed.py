@@ -106,3 +106,27 @@ BASE_STYLE = """
 
 if __name__ == "__main__":
     app.run(debug=False, use_reloader=False, port=5001)
+@app.route("/")
+def home():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Ocubed</title>
+        <style>
+            body {
+                background: #101827;
+                color: white;
+                font-family: Arial, sans-serif;
+                text-align: center;
+                padding: 80px 20px;
+            }
+            h1 { color: #60a5fa; }
+        </style>
+    </head>
+    <body>
+        <h1>Welcome to Ocubed!</h1>
+        <p>Your social app is online.</p>
+    </body>
+    </html>
+    """
