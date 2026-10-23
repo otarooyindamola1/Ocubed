@@ -79,7 +79,17 @@ def create_tables():
             FOREIGN KEY (followed_id) REFERENCES users(id)
         )
     """)
-
+ db.execute("""
+        CREATE TABLE IF NOT EXISTS likes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            post_id INTEGER NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(user_id, post_id),
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (post_id) REFERENCES posts(id)
+        )
+    """)
     columns = {
         row[1] for row in db.execute(
             "PRAGMA table_info(users)"
