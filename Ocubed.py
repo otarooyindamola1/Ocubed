@@ -557,18 +557,18 @@ def home():
           </a>
           <p class="muted">{{ post['created_at'] }}</p>
           <p style="white-space: pre-wrap">{{ post['content'] }}</p>
-         <div style="margin-top: 12px;">
-            <form method="post"
-                  action="{{ url_for('like_post', post_id=post['id']) }}">
-              <button type="submit">
-                {% if post['liked_by_me'] %}
-                  ❤️ Liked
-                {% else %}
-                  🤍 Like
-                {% endif %}
-                · {{ post['like_count'] }}
-              </button>
-            </form>
+          <form method="post"
+                action="{{ url_for('like_post', post_id=post['id']) }}"
+                style="margin-top: 12px;">
+            <button type="submit">
+              {% if post['liked_by_me'] %}
+                ❤️ Liked
+              {% else %}
+                🤍 Like
+              {% endif %}
+              · {{ post['like_count'] }}
+            </button>
+          </form>
           </div>
         </article>
       {% else %}
