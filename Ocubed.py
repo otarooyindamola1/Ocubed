@@ -487,28 +487,38 @@ def page(title, content, **context):
 
 # ---------------- HOMEPAGE / FEED ----------------
 @app.route("/like/<int:post_id>", methods=["POST"])
+@login_required
 def like_post(post_id):
-    user = current_user()
-
-    if not user:
-        return redirect(url_for("login"))
-
     db = get_db()
+    user_id = session["user_id"]
 
     post = db.execute(
         "SELECT id FROM posts WHERE id = ?",
         (post_id,)
     ).fetchone()
 
-    if post:
+    if not post:
+        flash("Post not found.")
+        return redirect(url_for("home"))
+
+    existing_like = db.execute("""
+        SELECT id FROM likes
+        WHERE user_id = ? AND post_id = ?
+    """, (user_id, post_id)).fetchone()
+
+    if existing_like:
         db.execute("""
-            INSERT OR IGNORE INTO likes (user_id, post_id)
+            DELETE FROM likes
+            WHERE user_id = ? AND post_id = ?
+        """, (user_id, post_id))
+    else:
+        db.execute("""
+            INSERT INTO likes (user_id, post_id)
             VALUES (?, ?)
-        """, (user["id"], post_id))
-        db.commit()
+        """, (user_id, post_id))
 
+    db.commit()
     return redirect(url_for("home"))
-
 
 
 @app.route("/")
