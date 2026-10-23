@@ -516,7 +516,21 @@ def home():
     if user:
         posts = get_db().execute("""
             SELECT posts.*, users.username, users.display_name,
-                   users.profile_picture
+                   users.profile_picture,
+                   (SELECT COUNT(*) FROM likes
+                    WHERE likes.post_id = posts.id) AS like_count,
+                   (SELECT COUNT(*) FROM likes
+                    WHERE likes.post_id = posts.id
+                    AND likes.user_id = ?) AS liked_by_me
+            FROM posts JOIN users ON users.id = posts.user_id
+            WHERE posts.user_id = ?
+               OR posts.user_id IN (
+                   SELECT followed_id FROM follows
+                   WHERE follower_id = ?
+               )
+            ORDER BY posts.id DESC
+        """, (user["id"], user["id"], user["id"])).fetchall()
+
             FROM posts JOIN users ON users.id = posts.user_id
             WHERE posts.user_id = ?
                OR posts.user_id IN (
