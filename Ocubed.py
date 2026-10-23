@@ -139,50 +139,293 @@ def allowed_file(filename):
 
 STYLE = """
 <style>
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #0c0815;
+    --panel: #171023;
+    --panel-hover: #211532;
+    --border: #302040;
+    --purple: #a855f7;
+    --purple-light: #d8b4fe;
+    --text: #f8f4ff;
+    --muted: #a99bbd;
+}
+
 body {
-    margin: 0; background: #100b1b; color: #f6f0ff;
-    font-family: Arial, sans-serif; line-height: 1.6;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.65;
+    font-size: 15px;
 }
+
+a {
+    color: var(--purple-light);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
 nav {
-    background: #1b122b; padding: 15px 5%;
-    display: flex; justify-content: space-between;
-    align-items: center; flex-wrap: wrap; gap: 12px;
-    border-bottom: 1px solid #39264d;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(23, 16, 35, 0.96);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
-.brand { color: #d7a5ff; font-size: 25px; font-weight: bold; }
-a { color: #d7a5ff; text-decoration: none; }
-nav a { margin-right: 12px; }
-main { max-width: 760px; margin: 30px auto; padding: 0 16px; }
+
+.brand {
+    color: var(--purple-light);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+nav div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+nav div a {
+    padding: 8px 12px;
+    border-radius: 9px;
+    color: #ded2ed;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+nav div a:hover {
+    background: var(--panel-hover);
+    color: white;
+}
+
+main {
+    width: 100%;
+    max-width: 780px;
+    margin: 34px auto;
+    padding: 0 20px;
+    min-height: 65vh;
+}
+
+h1, h2, h3 {
+    line-height: 1.3;
+    letter-spacing: -0.4px;
+}
+
+h1 {
+    font-size: clamp(25px, 4vw, 34px);
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 23px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+p {
+    overflow-wrap: anywhere;
+}
+
 .card {
-    background: #1c1429; border: 1px solid #382649;
-    padding: 22px; border-radius: 16px; margin-bottom: 18px;
+    background: linear-gradient(145deg, #1b1329, #151020);
+    border: 1px solid var(--border);
+    padding: 24px;
+    border-radius: 19px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+    transition: border-color 0.2s ease;
 }
+
+.card:hover {
+    border-color: #49305f;
+}
+
+.card h1:last-child,
+.card h2:last-child,
+.card h3:last-child {
+    margin-bottom: 0;
+}
+
 input, textarea {
-    display: block; width: 100%; padding: 12px;
-    margin: 10px 0 16px; border-radius: 9px;
-    border: 1px solid #503866; background: #100b1b;
-    color: white; font: inherit;
+    display: block;
+    width: 100%;
+    padding: 13px 15px;
+    margin: 9px 0 18px;
+    border-radius: 11px;
+    border: 1px solid #413052;
+    background: #0e0a17;
+    color: var(--text);
+    font: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
-textarea { min-height: 100px; resize: vertical; }
+
+input:focus, textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.13);
+}
+
+input::placeholder, textarea::placeholder {
+    color: #81728f;
+}
+
+input[type="file"] {
+    padding: 10px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+label {
+    display: block;
+    color: #e6d9f5;
+    font-weight: 600;
+    font-size: 14px;
+}
+
 button, .button {
-    display: inline-block; background: #a855f7; color: white;
-    border: 0; border-radius: 9px; padding: 10px 16px;
-    cursor: pointer; font-weight: bold; font-size: 14px;
+    display: inline-block;
+    background: linear-gradient(135deg, #b05cff, #8737df);
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    padding: 11px 19px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: inherit;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(143, 55, 223, 0.18);
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
 }
-button:hover, .button:hover { background: #9333ea; }
-.muted { color: #b9a9ca; font-size: 14px; }
-.notice { padding: 12px; background: #30203f; border-radius: 9px; }
+
+button:hover, .button:hover {
+    color: white;
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(143, 55, 223, 0.28);
+}
+
+button:active, .button:active {
+    transform: translateY(0);
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.notice {
+    padding: 13px 16px;
+    background: #241631;
+    border: 1px solid #54346d;
+    border-radius: 12px;
+    color: #e9d5ff;
+    overflow-wrap: anywhere;
+}
+
+.person {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.person > div {
+    min-width: 0;
+}
+
 .avatar {
-    width: 76px; height: 76px; border-radius: 50%;
-    object-fit: cover; background: #39264d;
+    width: 76px;
+    height: 76px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    background: linear-gradient(135deg, #a855f7, #4c1d95);
+    border: 2px solid #71429b;
 }
-.person { display: flex; gap: 14px; align-items: center; }
-h1, h2, h3 { line-height: 1.25; }
-footer { text-align: center; color: #9c8bab; padding: 25px; }
-@media(max-width: 500px) {
-    nav { align-items: flex-start; }
-    main { margin-top: 18px; }
+
+.card .person h1 {
+    margin-bottom: 3px;
+}
+
+.card .person p {
+    margin-top: 0;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 22px 0;
+}
+
+footer {
+    text-align: center;
+    color: #9281a6;
+    padding: 28px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    nav {
+        padding: 13px 16px;
+        align-items: flex-start;
+    }
+
+    nav div {
+        width: 100%;
+        gap: 4px;
+    }
+
+    nav div a {
+        padding: 7px 9px;
+        font-size: 13px;
+    }
+
+    main {
+        margin-top: 22px;
+        padding: 0 13px;
+    }
+
+    .card {
+        padding: 19px;
+        border-radius: 15px;
+    }
+
+    .person {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    button, .button {
+        max-width: 100%;
+    }
 }
 </style>
 """
