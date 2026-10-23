@@ -79,7 +79,7 @@ def create_tables():
             FOREIGN KEY (followed_id) REFERENCES users(id)
         )
     """)
-  db.execute("""
+    db.execute("""
         CREATE TABLE IF NOT EXISTS likes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -90,6 +90,7 @@ def create_tables():
             FOREIGN KEY (post_id) REFERENCES posts(id)
         )
     """)
+    
 
     columns = {
         row[1] for row in db.execute(
@@ -509,6 +510,7 @@ def like_post(post_id):
     return redirect(url_for("home"))
 
 
+
 @app.route("/")
 def home():
     user = current_user()
@@ -523,7 +525,8 @@ def home():
                    (SELECT COUNT(*) FROM likes
                     WHERE likes.post_id = posts.id
                     AND likes.user_id = ?) AS liked_by_me
-            FROM posts JOIN users ON users.id = posts.user_id
+            FROM posts
+            JOIN users ON users.id = posts.user_id
             WHERE posts.user_id = ?
                OR posts.user_id IN (
                    SELECT followed_id FROM follows
@@ -531,14 +534,6 @@ def home():
                )
             ORDER BY posts.id DESC
         """, (user["id"], user["id"], user["id"])).fetchall()
-
-            WHERE posts.user_id = ?
-               OR posts.user_id IN (
-                   SELECT followed_id FROM follows
-                   WHERE follower_id = ?
-               )
-            ORDER BY posts.id DESC
-        """, (user["id"], user["id"])).fetchall()
 
     return page("Home", """
     {% if current_user %}
@@ -549,14 +544,17 @@ def home():
           placeholder="Share something with Ocubed..." required></textarea>
         <button type="submit">Publish post</button>
       </form>
+
       {% for post in posts %}
         <article class="card">
           <a href="{{ url_for('profile', username=post['username']) }}">
             <strong>{{ post['display_name'] or post['username'] }}</strong>
             @{{ post['username'] }}
           </a>
+
           <p class="muted">{{ post['created_at'] }}</p>
           <p style="white-space: pre-wrap">{{ post['content'] }}</p>
+
           <form method="post"
                 action="{{ url_for('like_post', post_id=post['id']) }}"
                 style="margin-top: 12px;">
@@ -568,7 +566,7 @@ def home():
               {% endif %}
               · {{ post['like_count'] }}
             </button>
-           </form>
+          </form>
         </article>
       {% else %}
         <div class="card">
@@ -585,6 +583,7 @@ def home():
       </section>
     {% endif %}
     """, posts=posts)
+
 
 
 # ---------------- REGISTRATION ----------------
