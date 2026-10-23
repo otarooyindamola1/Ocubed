@@ -484,6 +484,29 @@ def page(title, content, **context):
 
 
 # ---------------- HOMEPAGE / FEED ----------------
+@app.route("/like/<int:post_id>", methods=["POST"])
+def like_post(post_id):
+    user = current_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
+    db = get_db()
+
+    post = db.execute(
+        "SELECT id FROM posts WHERE id = ?",
+        (post_id,)
+    ).fetchone()
+
+    if post:
+        db.execute("""
+            INSERT OR IGNORE INTO likes (user_id, post_id)
+            VALUES (?, ?)
+        """, (user["id"], post_id))
+        db.commit()
+
+    return redirect(url_for("home"))
+
 
 @app.route("/")
 def home():
