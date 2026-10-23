@@ -79,7 +79,7 @@ def create_tables():
             FOREIGN KEY (followed_id) REFERENCES users(id)
         )
     """)
- db.execute("""
+  db.execute("""
         CREATE TABLE IF NOT EXISTS likes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -90,6 +90,7 @@ def create_tables():
             FOREIGN KEY (post_id) REFERENCES posts(id)
         )
     """)
+
     columns = {
         row[1] for row in db.execute(
             "PRAGMA table_info(users)"
@@ -531,7 +532,6 @@ def home():
             ORDER BY posts.id DESC
         """, (user["id"], user["id"], user["id"])).fetchall()
 
-            FROM posts JOIN users ON users.id = posts.user_id
             WHERE posts.user_id = ?
                OR posts.user_id IN (
                    SELECT followed_id FROM follows
@@ -568,8 +568,7 @@ def home():
               {% endif %}
               · {{ post['like_count'] }}
             </button>
-          </form>
-          </div>
+           </form>
         </article>
       {% else %}
         <div class="card">
